@@ -5,7 +5,7 @@ import { BackgroundBeams } from './ui/BackgroundBeams'
 
 const Hero = () => {
   return (
-    <section id='hero' className='w-full h-screen text-2 max-h-screen overflow-hidden'>
+    <section id='hero' className='relative w-full h-screen text-2 max-h-screen overflow-hidden'>
         {/* 3d model */}
         <div className='absolute w-full h-full z-0 '>
             <HeroCanvas />
@@ -25,7 +25,7 @@ const Hero = () => {
        بهترین کیفیتها برای هر سلیقه ای 
           </p>
         </div>
-        <BackgroundBeams />
+        <BackgroundBeams className='top-0' />
     </section>
   )
 }

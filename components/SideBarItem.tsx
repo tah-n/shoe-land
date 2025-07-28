@@ -3,12 +3,15 @@ import React from 'react'
 
 interface PropTypes {
     text: string;
+    href?: string;
 }
 
-const SideBarItem = ({text} : PropTypes) => {
+const SideBarItem = ({text,href} : PropTypes) => {
   return (
     <div className='w-full cursor-pointer h-[60px] shadow-xs flex items-center justify-end'>
-      {text}
+      <a href={href}>
+        {text}
+      </a>
     </div>
   )
 }

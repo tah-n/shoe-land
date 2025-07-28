@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import ParseProvider from "@/components/ParseProvider";
 
 export const metadata: Metadata = {
   title: "Land of Shoes",
@@ -16,7 +17,8 @@ export default function RootLayout({
       <body
         className={`antialiased`}
       >
-        {children}
+        <ParseProvider />
+          {children}
       </body>
     </html>
   );

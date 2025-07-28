@@ -9,6 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@chakra-ui/react": "^3.23.0",
+    "@emailjs/browser": "^4.4.1",
+    "@emotion/react": "^11.14.0",
     "@react-three/drei": "^10.5.1",
     "@react-three/fiber": "^9.2.0",
     "@types/three": "^0.178.1",
@@ -16,8 +19,10 @@
     "gsap": "^3.13.0",
     "motion": "^12.23.6",
     "next": "15.4.1",
+    "parse": "^6.1.1",
     "react": "19.1.0",
     "react-dom": "19.1.0",
+    "react-icons": "^5.5.0",
     "tailwind-merge": "^3.3.1",
     "three": "^0.178.0",
     "zustand": "^5.0.6"
