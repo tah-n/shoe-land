@@ -1,17 +1,22 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import HamburgerIcon from './HamburgerIcon'
 import Image from 'next/image'
 import useProps from '@/lib/useProps'
-import NavbarItems from './NavbarItems'
-import Button from './Button'
+import { BsCart } from "react-icons/bs";
+import Button from '@/components/Button'
+import NavItem from './NavItem'
+import { useRouter } from 'next/navigation'
 import Parse from 'parse'
 
-const Navbar = () => {
+
+const NewNavBar = () => {
     const openSideMenu = useProps(state => state.openSideMenu);
     const [changeNavBar,setChangeNavBar] = useState(false);
     const isMobile = useProps(state => state.isMobile);
-    const {currentUser} = useProps();
+    const router = useRouter();
+    const [showBg,setShowBg] = useState(false);
+    const currentUser = useProps(state => state.currentUser)
+    
 
     //function to open signin form
     const handleSignIn = () => {
@@ -38,18 +43,28 @@ const Navbar = () => {
       return () => window.removeEventListener('scroll', handleScroll);
     },[])
 
+    
     const handleLogOut = async() => {
       await Parse.User.logOut();
       useProps.getState().setCurrentUser(null);
     }
 
   return (
-    <div className={`${!openSideMenu && !isMobile && changeNavBar? 'lg:w-[80vw] md:w-[90vw] top-4 border-[1px] border-2/10 shadow-lg rounded-4xl bg-1 left-1/2 -translate-x-1/2' : 'w-full top-0 left-0 translate-x-0'} fixed z-40 h-[85px] flex px-5 items-center transition-all duration-1000 ease-in-out ${openSideMenu? 'backdrop-blur-none' : 'backdrop-blur-2xl bg-1/80'} justify-start md:justify-center`}>
-      <Image className='absolute left-5 hidden md:block' src={'/pics/logo.png'} width={70} height={80} alt='logo' />  
-      <HamburgerIcon />
-      <NavbarItems />
+    <div className={`${!openSideMenu && !isMobile && changeNavBar? 'lg:w-[80vw] w-[90vw] top-4 border-[1px] border-2/10 shadow-lg rounded-4xl bg-1 left-1/2 -translate-x-1/2' : 'w-full top-0 left-0 translate-x-0'} fixed z-40 h-[85px] flex px-5 items-center transition-all duration-1000 ease-in-out ${openSideMenu? 'backdrop-blur-none' : 'backdrop-blur-2xl bg-1/80'} justify-start`}>
+      <div className='relative w-max px-2 flex items-center justify-center gap-5'>
+        <Image className='left-5 hidden md:block' src={'/pics/logo.png'} width={70} height={80} alt='logo' /> 
+        {/* cart */}
+        <div  className={`relative p-2 rounded-md overflow-hidden cursor-pointer`} onMouseEnter={() => setShowBg(true)} onMouseLeave={() => setShowBg(false)} onClick={() => useProps.getState().setOpenCart(true)}>
+          <BsCart size={26} color={showBg? '#03001C':'#FEF3E2'} />
+          <div className={`absolute w-full h-full bg-2 top-0 transition-all duration-1000 ease-in-out -z-10  ${showBg? 'right-0' : '-right-full'}`} />
+        </div> 
+        {/* navbaritems */}
+        <NavItem text='خانه' onClick={() => router.push('/')} /> 
+      </div>
+
+      
       {/* add signin sign up button here */}
-      {currentUser === null?  
+      {currentUser === null? 
       <div className='absolute top-4 right-4 flex items-center'>
         <Button btnType='signin' onClick={handleSignIn}>
           ورود
@@ -66,9 +81,8 @@ const Navbar = () => {
       </div>
       }
      
-
     </div>
   )
 }
 
-export default Navbar
+export default NewNavBar

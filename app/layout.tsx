@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import ParseProvider from "@/components/ParseProvider";
+import FetchCurrentUser from "@/components/FetchCurrentUser";
+import SaveCart from "@/components/SaveCart";
+import LoadCart from "@/components/LoadCart";
+import { ToastContainer } from "react-toastify";
 
 export const metadata: Metadata = {
   title: "Land of Shoes",
@@ -13,12 +17,28 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fa">
+    <html lang="fa" data-scroll-behavior="smooth">
       <body
         className={`antialiased`}
       >
         <ParseProvider />
+        <FetchCurrentUser>
+        <SaveCart />
+        <LoadCart />
           {children}
+        </FetchCurrentUser>   
+          <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick={false}
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+           />
       </body>
     </html>
   );

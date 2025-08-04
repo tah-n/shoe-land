@@ -4,11 +4,12 @@ import Button from './Button';
 import Inputs from './Inputs';
 import Footprints from './Footprints';
 import CloseButton from './ui/CloseButton';
-import Parse, { initParse } from '@/lib/parse'
+import { Parse , initParse } from '@/lib/parse';
 import useProps from '@/lib/useProps';
 import emailjs from '@emailjs/browser';
 import Loading from './ui/Loading';
 import VerificationCode from './VerificationCode';
+import { toast } from 'react-toastify';
 
 type Sign = {
     type: 'signin' | 'signup';
@@ -33,7 +34,9 @@ const SignForms = ({type,setState}: Sign) => {
     };
     const [loading,setLoading] = useState(false);
     const [showVerificationPage,setShowverificationPage] = useState(false);
-    const {enteredCode} = useProps()
+    const {enteredCode} = useProps();
+    const setOpenSignIn = useProps(state => state.setOpenSignInForm);
+    const setCurrentUser = useProps(state => state.setCurrentUser)
  
     useEffect(() => {
       initParse()
@@ -53,10 +56,13 @@ const SignForms = ({type,setState}: Sign) => {
     }
 
     //send verification email
-    const sendVerificationEmail = async() => {
+    const sendVerificationEmail = async(params: {
+      name: string;
+      email: string;
+      code: string;
+    }) => {
       try {
-        const res = await emailjs.send(serviceId,templateId,templateParams,publicKey);
-        alert('email sent');
+        const res = await emailjs.send(serviceId,templateId,params,publicKey);
       } catch(err) {
         console.log(err);
       }
@@ -73,7 +79,6 @@ const SignForms = ({type,setState}: Sign) => {
       else if(name !== '' && lastName !== '' && email !== '' && password !== '') {
         console.log('sending')
 
-        // await Parse.User.logOut();
 
         const user = new Parse.User();
         user.set("name", name);
@@ -90,10 +95,11 @@ const SignForms = ({type,setState}: Sign) => {
         try {
           const userAdded = await user.signUp();
           console.log(userAdded);
-          sendVerificationEmail();
+          sendVerificationEmail(templateParams);
           setShowverificationPage(true);
         } catch(err: any) {
           console.log(err.message);
+          toast.error(err.message);
           throw err;
         } finally {
           setLoading(false)
@@ -111,15 +117,35 @@ const SignForms = ({type,setState}: Sign) => {
         console.log('logging in');
         try {
           const user = await Parse.User.logIn(email,password);
-          console.log('user signed in:', user);
+          const isValid = user.get('verifiedEmail');
+          const getCode = user.get('verificationCode');
+          const getName = user.get('name');
+          const getEmail = user.get('email');
+
+          if(isValid) {
+            toast.success('خوش آمدید');
+            setCurrentUser(user);
+            setOpenSignIn(false);
+          } else {
+            toast('حساب شما تایید نشده است. لطفا ایمیل خود را بررسی کنید');
+            const newTemplateParams =  {
+            name: getName,
+            code: getCode,
+            email: getEmail,
+          };
+          sendVerificationEmail(newTemplateParams);
+          setShowverificationPage(true);
+          }
+    
         } catch (err: any) {
           console.log(err.message);
+          toast.error(err.message);
           throw err;
         } finally {
           setLoading(false);
         }
       } else {
-        alert('email empty')
+        toast('لطفا ایمیل و پسوورد را به درستی وارد کنید')
       }
     }
 
@@ -132,21 +158,22 @@ const SignForms = ({type,setState}: Sign) => {
         if(!currentUser) return;
 
         const codeInDB = currentUser.get('verificationCode') as string;
-        console.log(codeInDB)
-        console.log(enteredCode)
+      
 
         if(enteredCode === codeInDB) {
           currentUser.set('verifiedEmail', true);
 
           try {
             await currentUser.save();
-            alert('verified')
+            toast('ایمیل با موفقیت تایید شد')
             setShowverificationPage(false);
+            if(type === 'signup') useProps.getState().setOpenSignUpForm(false);
+            if(type === 'signin') useProps.getState().setOpenSignInForm(false);
           } catch (err) {
             console.log(err);
           }
         } else {
-          alert('wrong')
+          toast('لطفا کد صحیح را وارد کنید')
         }
 
       }
@@ -160,8 +187,6 @@ const SignForms = ({type,setState}: Sign) => {
     <div className={`${baseClass} ${typeClass}`}>
       {/* close button */}
       <CloseButton setState={setState} />
-
-      {/* <VerificationCode name={name} email={email} /> */}
 
       
     {showVerificationPage? <VerificationCode name={name} email={email} /> : (
@@ -192,7 +217,6 @@ const SignForms = ({type,setState}: Sign) => {
         </>
       )}
     
-
       
       {/* bg footprints */}
       <Footprints />

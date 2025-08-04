@@ -9,7 +9,7 @@ interface Type {
   disabled?: boolean;
 }
 
-type BtnType = 'signin' | 'signup' | 'submit';
+type BtnType = 'signin' | 'signup' | 'submit' | 'addToCart';
 
 const Button = ({btnType,children,onClick,btnClass,disabled} : Type) => {
   const btnRef = useRef(null);
@@ -17,7 +17,8 @@ const Button = ({btnType,children,onClick,btnClass,disabled} : Type) => {
   const styleMap = {
     signin: 'text-2/70 hover:text-2 hover:border m-2 rounded-lg',
     signup: 'text-2/80 hover:text-1 hover:bg-2 border rounded-lg',
-    submit: 'text-2/80 font-semibold !text-lg hover:bg-1/90 bg-1 border rounded-lg !w-[80vw] sm:!w-84'
+    submit: 'text-2/80 font-semibold !text-lg hover:bg-1/90 bg-1 border rounded-lg !w-[80vw] sm:!w-84',
+    addToCart: 'text-1/80 font-semibold w-full h-10 bg-2 '
   };
 
   const className = `w-max h-fit py-2 px-5 text-sm font-dirooz cursor-pointer transition-all duration-700 ease-in flex items-center justify-center`

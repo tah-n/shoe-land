@@ -1,6 +1,7 @@
 
 export const womenWear = [
     {
+        id: '0',
         name: 'کفش مجلسی کلاسیک',
         price: 789000,
         colors: [
@@ -22,6 +23,7 @@ export const womenWear = [
         ]
     },
      {
+        id: '1',
         name: 'کفش پاشنه دار کلاسیک',
         price: 1789000,
         colors: [
@@ -38,6 +40,7 @@ export const womenWear = [
         ]
     }, 
     {
+        id: '2',
         name: 'کفش چرمی پاشنه دار',
         price: 2599000,
         colors: [
@@ -59,6 +62,7 @@ export const womenWear = [
         ]
     }, 
     {
+        id: '3',
         name: 'کفش مجلسی پاشنه دار کلاسیک',
         price: 2500000,
         colors: [
@@ -75,6 +79,7 @@ export const womenWear = [
         ]
     },
     {
+        id: '4',
         name: 'کفش مجلسی پاشنه دار ',
         price: 1850000,
         colors: [
@@ -86,6 +91,7 @@ export const womenWear = [
         ]
     },
     {
+        id: '5',
         name: 'کفش مجلسی پاشنه دار کلاسیک',
         price: 2499000,
         colors: [
@@ -102,6 +108,7 @@ export const womenWear = [
         ]
     },
         {
+        id: '6',
         name: 'کفش مجلسی کلاسیک برشکا',
         price: 2899000,
         colors: [

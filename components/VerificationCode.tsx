@@ -1,9 +1,10 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import Provider from '@/components/ui/chakra-provider';
-import Parse, { initParse } from '@/lib/parse'
+import { initParse, Parse } from '@/lib/parse'
 import { PinInput } from './PinInput';
 import emailjs from '@emailjs/browser';
+import { toast } from 'react-toastify';
 
 
 type Props = {
@@ -71,7 +72,7 @@ const VerificationCode = ({name, email}: Props) => {
     const sendVerificationEmail = async() => {
       try {
         const res = await emailjs.send(serviceId,templateId,templateParams,publicKey);
-        alert('email sent');
+        toast('ایمیل ارسال شد')
       } catch(err) {
         console.log(err);
       }
